@@ -1,0 +1,45 @@
+</div>
+<table id="products" class=" table table-striped ">
+  <thead >
+  <tr>
+    <th class=" border border-4 ">Title</th>
+    <th class=" border border-4 ">Quantity</th>
+    <th class=" border border-4 ">Price</th>
+    <th class=" border border-4 ">Categories</th>
+  </tr>
+  </thead>
+  <tbody id="insertProducts"></tbody>
+</table>
+<button class="rounded-pill border  border-3" id="refresh">
+  Refresh
+</button>
+
+<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+
+<script>
+  (function() {
+    "use strict";
+    function tableready(){
+    $.ajax("/data/inventory.json").done(function(data) {
+      console.log(data);
+      var html = ''
+      data.forEach(function(invy) {
+        html += `
+        <tr>
+        <td> ${invy.title} </td>
+        <td> ${invy.quantity} </td>
+        <td> ${invy.price} </td>
+        <td> ${invy.categories.join("-")} </td>
+         </tr>`
+        $(`#insertProducts`).html(html)
+    });
+    });}
+    tableready()
+    $(`#refresh`).click(function(){
+      tableready()
+    });
+  })();
+
+</script>
+
+</body>

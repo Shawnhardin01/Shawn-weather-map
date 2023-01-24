@@ -15,6 +15,7 @@
     </style>
 </head>
 <body>
+
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
 <nav class="navbar navbar-light bg-light">
@@ -30,10 +31,9 @@
 <div id="map"></div>
 </div>
 
-
-
 <script>
     mapboxgl.accessToken = MAPBOX_API_KEY;
+    const coordinates = document.getElementById('coordinates');
     const map = new mapboxgl.Map({
         container: 'map',
         // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
@@ -109,6 +109,7 @@
     map.addControl(new mapboxgl.NavigationControl());
 
 
+
 </script>
 <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
 <script>
@@ -120,14 +121,47 @@
         units: "imperial"
     }).done(function(data) {
         console.log('5 day forecast', data);
+        console.log(data.list[0])
+        console.log('rain',data.list[0].rain)
+        console.log(`main`,data.list[1].main)
+
+
     });
 
-</script>
+    $.get("http://api.openweathermap.org/data/2.5/forecast", {
+        APPID: OPENWEATHER_API_KEY,
+        lat:    29.423017,
+        lon:   -98.48527,
+        units: "imperial"
+    }).done(function(data) {
 
+
+    });
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
 
 
 </body>
+<div class="card" style="width: 18rem;">
+    <img src="../img/kent%20brockman.jpg" class="card-img-top" alt="...">
+    <div class="card-body">
 
+    </div>
+</div>
+
+<table id="products" class=" table table-striped ">
+    <thead >
+    <tr>
+        <th class=" border border-4 ">date</th>
+        <th class=" border border-4 ">weather</th>
+        <th class=" border border-4 ">rain</th>
+        <th class=" border border-4 ">humidity</th>
+    </tr>
+    </thead>
+    <tbody id="inserweather"></tbody>
+</table>
 
 
 </html>
