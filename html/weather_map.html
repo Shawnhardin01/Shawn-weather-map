@@ -6,12 +6,25 @@
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
-    <script src="../js/weathermap.js"></script>
     <script src="../js/keys.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
     <style>
         body { margin: 0; padding: 0; }
         #map {  top: 0; bottom: 0; width: 100%; height: 40em}
+        .coordinates {
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            position: absolute;
+            bottom: 40px;
+            left: 10px;
+            padding: 5px 10px;
+            margin: 0;
+            font-size: 11px;
+            line-height: 18px;
+            border-radius: 3px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -31,6 +44,81 @@
 <div id="map"></div>
 </div>
 
+<input id = "searchBar"/><button id="searchbtn">search</button>
+<div><pre id="coordinates" class="coordinates"></pre></div>
+<div class=" d-flex flex-row  justify-content-evenly " id="weatherBox">
+
+    <div>
+        <ul>
+            <li>Date&time</li>
+            <li></li>
+            <li>Humidity</li>
+            <li></li>
+            <li>Temp</li>
+            <li></li>
+            <li>Pressure</li>
+            <li></li>
+            <li>Wind Speed</li>
+        </ul>
+    </div>
+    <div id="weatherData1"></div>
+    <div>
+        <ul>
+            <li>Date&time</li>
+            <li></li>
+            <li>Humidity</li>
+            <li></li>
+            <li>Temp</li>
+            <li></li>
+            <li>Pressure</li>
+            <li></li>
+            <li>Wind Speed</li>
+        </ul>
+    </div>
+    <div id="weatherData2"></div>
+    <div>
+        <ul>
+            <li>Date&time</li>
+            <li></li>
+            <li>Humidity</li>
+            <li></li>
+            <li>Temp</li>
+            <li></li>
+            <li>Pressure</li>
+            <li></li>
+            <li>Wind Speed</li>
+        </ul>
+    </div>
+    <div id="weatherData3"></div>
+    <div>
+        <ul>
+            <li>Date&time</li>
+            <li></li>
+            <li>Humidity</li>
+            <li></li>
+            <li>Temp</li>
+            <li></li>
+            <li>Pressure</li>
+            <li></li>
+            <li>Wind Speed</li>
+        </ul>
+    </div>
+    <div class="" id="weatherData4"></div>
+    <div>
+        <ul>
+            <li>Date&time</li>
+            <li></li>
+            <li>Humidity</li>
+            <li></li>
+            <li>Temp</li>
+            <li></li>
+            <li>Pressure</li>
+            <li></li>
+            <li> Wind Speed</li>
+        </ul>
+    </div>
+    <div id="weatherData5"></div>
+</div>
 <script>
     mapboxgl.accessToken = MAPBOX_API_KEY;
     const coordinates = document.getElementById('coordinates');
@@ -42,9 +130,7 @@
         zoom: 9
     });
     const coordinatesGeocoder = function (query) {
-        const matches = query.match(
-            /^[ ]*(?:Lat: )?(-?\d+\.?\d*)[, ]+(?:Lng: )?(-?\d+\.?\d*)[ ]*$/i
-        );
+        const matches = query.match();
         if (!matches) {
             return null;
         }
@@ -84,7 +170,7 @@
         return geocodes;
 
     };
-    // Add the control to the map.
+
     map.addControl(
         new MapboxGeocoder({
             accessToken: mapboxgl.accessToken,
@@ -109,59 +195,117 @@
     map.addControl(new mapboxgl.NavigationControl());
 
 
+    document.querySelector("#searchbtn")
+    searchbtn.addEventListener("click", function (){
+      geocode(document.querySelector(`#searchBar`).value, MAPBOX_API_KEY).then(function (result){
+           map.setCenter(result)
+          marker.setLngLat(result)
 
+      }).then(function (){ onDragEnd()
+
+      })
+
+
+    });
+
+
+    var geolocate = new mapboxgl.GeolocateControl();
+
+    map.addControl(geolocate);
+
+    geolocate.on('geolocate', function(e) {
+        var lon = e.coords.longitude;
+        var lat = e.coords.latitude
+        var position = [lon, lat];
+        console.log(position);
+
+
+
+    });
 </script>
 <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+
+
 <script>
-
-    $.get("http://api.openweathermap.org/data/2.5/forecast", {
+    let weatherOptioons ={
         APPID: OPENWEATHER_API_KEY,
-        lat:    29.423017,
-        lon:   -98.48527,
+        lat: 29.423017,
+        lon: -98.48527,
         units: "imperial"
-    }).done(function(data) {
-        console.log('5 day forecast', data);
-        console.log(data.list[0])
-        console.log('rain',data.list[0].rain)
-        console.log(`main`,data.list[1].main)
+    }
+    function  getWeather () {
+
+        $(`#weatherData1`).html(``)
+        $(`#weatherData2`).html(``)
+        $(`#weatherData3`).html(``)
+        $(`#weatherData4`).html(``)
+        $(`#weatherData5`).html(``)
+        $.get("http://api.openweathermap.org/data/2.5/forecast", weatherOptioons).done(function (data) {
+            console.log('5 day forecast', data);
+
+            $(`#weatherData1`).append(`<p>` + data.list[0].dt_txt + `</p>` +
+                `<p>` + data.list[0].main.humidity + `</p>` +
+                `<p>` + data.list[0].main.temp + `</p>` +
+                `<p>` + data.list[0].main.pressure + `</p>` +
+                `<p>` + data.list[0].wind.speed + `</p>`)
+
+            $(`#weatherData2`).append(`<p>` + data.list[8].dt_txt + `</p>` +
+                `<p>` + data.list[8].main.humidity + `</p>` +
+                `<p>` + data.list[8].main.temp + `</p>` +
+                `<p>` + data.list[8].main.pressure + `</p>` +
+                `<p>` + data.list[8].wind.speed + `</p>`)
+
+            $(`#weatherData3`).append(`<p>` + data.list[16].dt_txt + `</p>` +
+                `<p>` + data.list[16].main.humidity + `</p>` +
+                `<p>` + data.list[16].main.temp + `</p>` +
+                `<p>` + data.list[16].main.pressure + `</p>` +
+                `<p>` + data.list[16].wind.speed + `</p>`)
+
+            $(`#weatherData4`).append(`<p>` + data.list[24].dt_txt + `</p>` +
+                `<p>` + data.list[24].main.humidity + `</p>` +
+                `<p>` + data.list[24].main.temp + `</p>` +
+                `<p>` + data.list[24].main.pressure + `</p>` +
+                `<p>` + data.list[24].wind.speed + `</p>`)
 
 
-    });
+            $(`#weatherData5`).append(`<p>` + data.list[32].dt_txt + `</p>` +
+                `<p>` + data.list[32].main.humidity + `</p>` +
+                `<p>` + data.list[32].main.temp + `</p>` +
+                `<p>` + data.list[32].main.pressure + `</p>` +
+                `<p>` + data.list[32].wind.speed + `</p>`)
+        });
+    }
+getWeather()
 
-    $.get("http://api.openweathermap.org/data/2.5/forecast", {
-        APPID: OPENWEATHER_API_KEY,
-        lat:    29.423017,
-        lon:   -98.48527,
-        units: "imperial"
-    }).done(function(data) {
 
 
-    });
+
+
+    const marker = new mapboxgl.Marker({
+        draggable: true
+    })
+        .setLngLat([-98.48527, 29.423017])
+        .addTo(map);
+
+    function onDragEnd() {
+        const lngLat = marker.getLngLat();
+        coordinates.style.display = 'block';
+        coordinates.innerHTML = `Longitude: ${lngLat.lng}<br />Latitude: ${lngLat.lat}`;
+        console.log(coordinates)
+       weatherOptioons.lon = lngLat.lng
+        weatherOptioons.lat = lngLat.lat
+        getWeather();
+    }
+    marker.on('dragend', onDragEnd);
+
+
+</script>
 
 
 
 <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
-
-
 </body>
-<div class="card" style="width: 18rem;">
-    <img src="../img/kent%20brockman.jpg" class="card-img-top" alt="...">
-    <div class="card-body">
 
-    </div>
-</div>
-
-<table id="products" class=" table table-striped ">
-    <thead >
-    <tr>
-        <th class=" border border-4 ">date</th>
-        <th class=" border border-4 ">weather</th>
-        <th class=" border border-4 ">rain</th>
-        <th class=" border border-4 ">humidity</th>
-    </tr>
-    </thead>
-    <tbody id="inserweather"></tbody>
-</table>
 
 
 </html>
