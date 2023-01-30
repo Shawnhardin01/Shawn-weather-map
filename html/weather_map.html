@@ -25,6 +25,7 @@
             border-radius: 3px;
             display: none;
         }
+
     </style>
 </head>
 <body>
@@ -37,24 +38,25 @@
             <img src="../img/thenounproject.png" alt="" width="80" height="80" class="d-inline-block align-text-center">
             Weather and stuff
         </a>
-
+        <div>
+        <input id = "searchBar"/><button id="searchbtn">search</button>
+    </div>
     </div>
 </nav>
 <div>
 <div id="map"></div>
 </div>
 
-<input id = "searchBar"/><button id="searchbtn">search</button>
-<div><pre id="coordinates" class="coordinates"></pre></div>
-<div class=" d-flex flex-row  justify-content-evenly " id="weatherBox">
 
+<div><pre id="coordinates" class="coordinates"></pre></div>
+<div class=" d-flex flex-row  justify-content-evenly  " id="weatherBox">
     <div>
         <ul>
             <li>Date&time</li>
             <li></li>
-            <li>Humidity</li>
-            <li></li>
             <li>Temp</li>
+            <li></li>
+            <li>Humidity</li>
             <li></li>
             <li>Pressure</li>
             <li></li>
@@ -66,9 +68,9 @@
         <ul>
             <li>Date&time</li>
             <li></li>
-            <li>Humidity</li>
-            <li></li>
             <li>Temp</li>
+            <li></li>
+            <li>Humidity</li>
             <li></li>
             <li>Pressure</li>
             <li></li>
@@ -80,9 +82,9 @@
         <ul>
             <li>Date&time</li>
             <li></li>
-            <li>Humidity</li>
-            <li></li>
             <li>Temp</li>
+            <li></li>
+            <li>Humidity</li>
             <li></li>
             <li>Pressure</li>
             <li></li>
@@ -94,9 +96,9 @@
         <ul>
             <li>Date&time</li>
             <li></li>
-            <li>Humidity</li>
-            <li></li>
             <li>Temp</li>
+            <li></li>
+            <li>Humidity</li>
             <li></li>
             <li>Pressure</li>
             <li></li>
@@ -108,9 +110,9 @@
         <ul>
             <li>Date&time</li>
             <li></li>
-            <li>Humidity</li>
-            <li></li>
             <li>Temp</li>
+            <li></li>
+            <li>Humidity</li>
             <li></li>
             <li>Pressure</li>
             <li></li>
@@ -119,6 +121,7 @@
     </div>
     <div id="weatherData5"></div>
 </div>
+
 <script>
     mapboxgl.accessToken = MAPBOX_API_KEY;
     const coordinates = document.getElementById('coordinates');
@@ -244,33 +247,33 @@
             console.log('5 day forecast', data);
 
             $(`#weatherData1`).append(`<p>` + data.list[0].dt_txt + `</p>` +
-                `<p>` + data.list[0].main.humidity + `</p>` +
                 `<p>` + data.list[0].main.temp + `</p>` +
+                `<p>` + data.list[0].main.humidity+ `</p>` +
                 `<p>` + data.list[0].main.pressure + `</p>` +
                 `<p>` + data.list[0].wind.speed + `</p>`)
 
             $(`#weatherData2`).append(`<p>` + data.list[8].dt_txt + `</p>` +
-                `<p>` + data.list[8].main.humidity + `</p>` +
                 `<p>` + data.list[8].main.temp + `</p>` +
+                `<p>` + data.list[8].main.humidity + `</p>` +
                 `<p>` + data.list[8].main.pressure + `</p>` +
                 `<p>` + data.list[8].wind.speed + `</p>`)
 
             $(`#weatherData3`).append(`<p>` + data.list[16].dt_txt + `</p>` +
-                `<p>` + data.list[16].main.humidity + `</p>` +
                 `<p>` + data.list[16].main.temp + `</p>` +
+                `<p>` + data.list[16].main.humidity + `</p>` +
                 `<p>` + data.list[16].main.pressure + `</p>` +
                 `<p>` + data.list[16].wind.speed + `</p>`)
 
             $(`#weatherData4`).append(`<p>` + data.list[24].dt_txt + `</p>` +
-                `<p>` + data.list[24].main.humidity + `</p>` +
                 `<p>` + data.list[24].main.temp + `</p>` +
+                `<p>` + data.list[24].main.humidity + `</p>` +
                 `<p>` + data.list[24].main.pressure + `</p>` +
                 `<p>` + data.list[24].wind.speed + `</p>`)
 
 
             $(`#weatherData5`).append(`<p>` + data.list[32].dt_txt + `</p>` +
-                `<p>` + data.list[32].main.humidity + `</p>` +
                 `<p>` + data.list[32].main.temp + `</p>` +
+                `<p>` + data.list[32].main.humidity + `</p>` +
                 `<p>` + data.list[32].main.pressure + `</p>` +
                 `<p>` + data.list[32].wind.speed + `</p>`)
         });
